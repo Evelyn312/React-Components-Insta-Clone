@@ -5,16 +5,23 @@ import Comment from "./Comment";
 import "./Comment.css";
 
 const CommentSection = props => {
+  const initialState = {username: '', text: ''};
   // Add state for the comments
   const [comments, setComments] = useState(props.comments);
+  const [comment, setComment] = useState(initialState);
 
   const onInputChange = (event) => {
-    console.log('event' , event.target.value);
+    const newCommentObj = {
+      username: 'anonymous',
+      text: event.target.value
+    }
+    setComment(newCommentObj);
   }
 
   const handleSubmit = (event) => {
-    event.preventDefault();
-
+    event.preventDefault(); // stops submit button from reloading page
+    setComments(comments => [...comments, comment]);
+    setComment(initialState);
   };
 
   return (
@@ -24,7 +31,7 @@ const CommentSection = props => {
           return <Comment comment={item} key={i}/>
         })
       }
-      <CommentInput comment={props.postId} submitComment={handleSubmit} changeComment={onInputChange}/>
+      <CommentInput comment={comment.text} submitComment={handleSubmit} changeComment={onInputChange}/>
     </div>
   );
 };
